@@ -5,11 +5,12 @@ import getWeb3 from "./utils/getWeb3";
 
 import Grave from "./components/Grave";
 import GraveForm from "./components/GraveForm";
+import AddGraveButton from "./components/AddGraveButton";
 
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null, idGenerator: null };
+  state = { gravesList: [], web3: null, accounts: null, contract: null, idGenerator: null };
 
   componentDidMount = async () => {
     try {
@@ -42,24 +43,57 @@ class App extends Component {
   runExample = async () => {
     const { accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    //await contract.methods.set(5).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
     const response = await contract.methods.idGenerator().call();
+
+    //const testAddGrave = await contract.methods.addHamsterGrave('totoro', 1, 2, 'RIP').call();
 
     // Update state with the result.
     this.setState({ idGenerator: response });
   };
 
+  populateGraveyard = async () => {
+    var temp;
+    var gravesListTemp = [];
+
+    const { accounts, contract } = this.state;
+
+    const response = await contract.methods.idGenerator().call();
+    this.setState({ idGenerator: response });
+
+    for(var i = 0; i < this.idGenerator; i++){
+          temp = await contract.methods.viewHamsterGrave(i);
+
+          gravesListTemp[i].name = temp.name;
+          gravesListTemp[i].yearOfBirth = temp.yearOfBirth;
+          gravesListTemp[i].yearOfDeath = temp.yearOfDeath;
+          gravesListTemp[i].memoriam = temp.memoriam;
+    }
+
+    this.setState({ gravesList: gravesListTemp});
+
+  }
+
   render() {
+
+    var names =['Ham', 'Shem', 'Ham2'];
+    var namesList = names.map(function(name){
+      return <Grave name={name} yob={2001} yod={2002} memoriam="RIP"/>;
+    })
+
+
+
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
-        <div>The idGenerator value is: {this.state.idGenerator}</div>
-        <GraveForm/>
+        <div>The idGenerator value is {this.state.idGenerator}</div>
+        <div className="ui three column grid">
+          {namesList}
+          <AddGraveButton/>
+        </div>
       </div>
     );
   }
