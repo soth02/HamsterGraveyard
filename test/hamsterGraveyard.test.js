@@ -73,6 +73,7 @@ contract("HamsterGraveyard", accounts => {
     assert.equal(updatedMemoriam, updatedGraveData.memoriam, "the updated memoriam should match");
   })
 
+  //validate that viewHamsterGrave is accurately returning values
   it("viewing a hamsterGrave should correctly return its values", async () => {
 
     const tx = await instance.addHamsterGrave(name, yob, yod, memoriam);
@@ -86,6 +87,7 @@ contract("HamsterGraveyard", accounts => {
     assert.equal(graveData.memoriam, response.memoriam,"the viewed memoriam should be equal to the added Memoriam");
   })
 
+  //validate the onlyOwner modifier is working
   it("only the owner should only be able to update their own memorials", async () => {
 
     const tx = await instance.addHamsterGrave(name, yob, yod, memoriam, {from: owner});
@@ -93,5 +95,22 @@ contract("HamsterGraveyard", accounts => {
 
     await catchRevert(instance.updateHamsterGrave(graveData.hamsterGraveNum,updatedName, updatedYob, updatedYod, updatedMemoriam, {from:alice}));
   })
+
+  //validate that the mapping graves is being populated as expected
+  it("able to access the last added key of the graves HamsterGrave array of structs", async () => {
+
+     const tx1 = await instance.addHamsterGrave(name, yob, yod, memoriam);
+     const tx2 = await instance.addHamsterGrave(name, yob, yod, memoriam);
+     const tx3 = await instance.addHamsterGrave(name, yob, yod, memoriam);
+
+     const idgen = await instance.getIdGenerator.call();
+     const lastNum = idgen.toNumber();
+
+     const mygraves = await instance.graves.call(lastNum-1);
+
+     assert.equal(mygraves.isCreated, true, "We should see that the key '2' is created in graves.");
+  })
+
+
 
 })

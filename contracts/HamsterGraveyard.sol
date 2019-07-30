@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "../installed_contracts/Ownable.sol";
 import "../installed_contracts/Pausable.sol";
 
-///@title A personal virtual graveyard for beloved hamsters
+///@title A personal virtual graveyard for beloved hamsters.
 ///@author Soth02
 ///@notice Use this contract at your own risk!  It has not been professionally audited for security.
 contract HamsterGraveyard is Ownable, Pausable {
@@ -20,36 +20,34 @@ contract HamsterGraveyard is Ownable, Pausable {
       uint yearOfBirth;
       uint yearOfDeath;
 
-      /// limit to 100 characters
+      /// limit memorium to 100 characters.  Might have to do this on front end?
       string memoriam;
       bool isCreated;
     }
 
-    /// graves is an array of HamsterGrave structs
+    /// graves is an mapping of HamsterGrave structs
     mapping (uint => HamsterGrave) public graves;
 
+    ///events
     event LogHamsterGraveAdded(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
     event LogHamsterGraveUpdated(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
 
+    ///possibly superfluous getter function
     function getIdGenerator() view public returns (uint){
       return (idGenerator);
     }
 
-    ///
+    /// allows the owner to add new memorials
     function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused() onlyOwner()
         returns (uint) {
 
 	      require(yearOfDeath >= yearOfBirth);
 
-
         graves[idGenerator].isCreated = true;
-
-
         graves[idGenerator].name = name;
         graves[idGenerator].yearOfBirth = yearOfBirth;
         graves[idGenerator].yearOfDeath = yearOfDeath;
         graves[idGenerator].memoriam = memoriam;
-
 
         emit LogHamsterGraveAdded(idGenerator, name, yearOfBirth, yearOfDeath, memoriam);
 
@@ -58,7 +56,7 @@ contract HamsterGraveyard is Ownable, Pausable {
 	      return (idGenerator-1);
     }
 
-    ///update the HamsterGrave info
+    /// allows the owner to update the HamsterGrave info
     function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused()  onlyOwner()
         returns (uint) {
 
@@ -72,7 +70,7 @@ contract HamsterGraveyard is Ownable, Pausable {
 	      return (hamsterGraveNum);
     }
 
-    ///
+    /// allows anyone to view the owner's hamster graveyard
     function viewHamsterGrave (uint hamsterGraveNum) view public
 	  returns (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam) {
 

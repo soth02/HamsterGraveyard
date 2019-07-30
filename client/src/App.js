@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import ReactDOM from 'react-dom';
+import HamsterGraveyardContract from "./contracts/HamsterGraveyard.json";
 import getWeb3 from "./utils/getWeb3";
+
+import Grave from "./components/Grave";
+import GraveForm from "./components/GraveForm";
 
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { storageValue: 0, web3: null, accounts: null, contract: null, idGenerator: null };
 
   componentDidMount = async () => {
     try {
@@ -17,9 +21,9 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = HamsterGraveyardContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        HamsterGraveyardContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
@@ -39,13 +43,13 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+    //await contract.methods.set(5).send({ from: accounts[0] });
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    const response = await contract.methods.idGenerator().call();
 
     // Update state with the result.
-    this.setState({ storageValue: response });
+    this.setState({ idGenerator: response });
   };
 
   render() {
@@ -54,17 +58,8 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <div>The idGenerator value is: {this.state.idGenerator}</div>
+        <GraveForm/>
       </div>
     );
   }
