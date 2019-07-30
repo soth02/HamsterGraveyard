@@ -1,8 +1,9 @@
 pragma solidity ^0.5.0;
 
-contract HamsterGraveyard {
+import "../installed_contracts/Ownable.sol";
+import "../installed_contracts/Pausable.sol";
 
-    address payable public owner = msg.sender;
+contract HamsterGraveyard is Ownable, Pausable {
 
     /*
         Create a variable to keep track of the event ID numbers.
@@ -24,16 +25,12 @@ contract HamsterGraveyard {
     event LogHamsterGraveAdded(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
     event LogHamsterGraveUpdated(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
 
-    constructor () public {
-        owner = msg.sender;
-    }
-
     function getIdGenerator() view public returns (uint){
       return (idGenerator);
     }
 
     //
-    function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public
+    function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused
         returns (uint) {
 
 	      require(yearOfDeath >= yearOfBirth);
@@ -51,7 +48,7 @@ contract HamsterGraveyard {
     }
 
     //update the dog info
-    function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public
+    function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused
         returns (uint) {
 
         owners[msg.sender][hamsterGraveNum].name = name;

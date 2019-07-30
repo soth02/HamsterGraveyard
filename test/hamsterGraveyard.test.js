@@ -67,9 +67,9 @@ contract("HamsterGraveyard", accounts => {
     assert.equal(graveData.yearOfBirth.toNumber(), response.yearOfBirth.toNumber(), "the viewed yearOfBirth should be equal to the added YOB");
     assert.equal(graveData.yearOfDeath.toNumber(), response.yearOfDeath.toNumber(),"the viewed yearOfDeath should be equal to the added YOD");
     assert.equal(graveData.memoriam, response.memoriam,"the viewed memoriam should be equal to the added Memoriam");
+  })
 
-
-
+  it("future test", async () => {
 
   })
 
