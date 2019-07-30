@@ -1,5 +1,5 @@
 var SimpleStorage = artifacts.require("./SimpleStorage.sol");
-var HamsterGraveyad = artifacts.require("./HamsterGraveyard.sol");
+var HamsterGraveyard = artifacts.require("./HamsterGraveyard.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(SimpleStorage);
