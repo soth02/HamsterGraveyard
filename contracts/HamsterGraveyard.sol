@@ -29,24 +29,15 @@ contract HamsterGraveyard is Ownable, Pausable {
     mapping (uint => HamsterGrave) public graves;
 
     ///events
-
-    ///@dev event to log addHamsterGrave results
     event LogHamsterGraveAdded(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
-    ///@dev event to log updateHamsterGrave results
     event LogHamsterGraveUpdated(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
 
-    ///@dev get idGenerator
-    ///@return idGenerator - current value represents the (max value of the used uint keys)+1
+    ///possibly superfluous getter function
     function getIdGenerator() view public returns (uint){
       return (idGenerator);
     }
 
-    ///@dev allows the owner to add new memorials
-    ///@param name - Name of the dead hamster
-    ///@param yearOfBirth - year hamster was born
-    ///@param yearOfDeath - year hamster died
-    ///@param memoriam - memoriam the user would like to give their hamster
-    ///@return uint of the grave's id
+    /// allows the owner to add new memorials
     function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused() onlyOwner()
         returns (uint) {
 
@@ -65,12 +56,7 @@ contract HamsterGraveyard is Ownable, Pausable {
 	      return (idGenerator-1);
     }
 
-    ///@dev allows the owner to update their hamster info
-    ///@param name - Name of the dead hamster
-    ///@param yearOfBirth - year hamster was born
-    ///@param yearOfDeath - year hamster died
-    ///@param memoriam - memoriam the user would like to give their hamster
-    ///@return uint of the grave's id
+    /// allows the owner to update the HamsterGrave info
     function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused()  onlyOwner()
         returns (uint) {
 
@@ -84,9 +70,7 @@ contract HamsterGraveyard is Ownable, Pausable {
 	      return (hamsterGraveNum);
     }
 
-    ///@dev allows anyone to view the owner's hamster graveyard
-    ///@param hamsterGraveNum - id of the hamster grave to view
-    ///@return name, yearOfBirth, yearOfDeath, memoriam
+    /// allows anyone to view the owner's hamster graveyard
     function viewHamsterGrave (uint hamsterGraveNum) view public
 	  returns (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam) {
 
