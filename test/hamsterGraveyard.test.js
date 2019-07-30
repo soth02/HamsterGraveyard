@@ -86,7 +86,7 @@ contract("HamsterGraveyard", accounts => {
     assert.equal(graveData.memoriam, response.memoriam,"the viewed memoriam should be equal to the added Memoriam");
   })
 
-  it("you should only be able to update your own memorials", async () => {
+  it("only the owner should only be able to update their own memorials", async () => {
 
     const tx = await instance.addHamsterGrave(name, yob, yod, memoriam, {from: owner});
     const graveData = tx.logs[0].args;

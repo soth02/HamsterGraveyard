@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "../installed_contracts/Ownable.sol";
 import "../installed_contracts/Pausable.sol";
 
-///@title A virtual graveyard for beloved hamsters
+///@title A personal virtual graveyard for beloved hamsters
 ///@author Soth02
 ///@notice Use this contract at your own risk!  It has not been professionally audited for security.
 contract HamsterGraveyard is Ownable, Pausable {
@@ -25,13 +25,8 @@ contract HamsterGraveyard is Ownable, Pausable {
       bool isCreated;
     }
 
-    /// owners stores a mapping of individual owner addresses to
-    mapping (address => mapping (uint => HamsterGrave)) public owners;
-
-    modifier isPetOwner(address _address, uint hamsterGraveNum){
-      require( owners[msg.sender][hamsterGraveNum].isCreated == true);
-      _;
-     }
+    /// graves is an array of HamsterGrave structs
+    mapping (uint => HamsterGrave) public graves;
 
     event LogHamsterGraveAdded(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
     event LogHamsterGraveUpdated(uint hamsterGraveNum, string name, uint yearOfBirth, uint yearOfDeath, string memoriam);
@@ -41,16 +36,20 @@ contract HamsterGraveyard is Ownable, Pausable {
     }
 
     ///
-    function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused
+    function addHamsterGrave (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused() onlyOwner()
         returns (uint) {
 
 	      require(yearOfDeath >= yearOfBirth);
 
-        owners[msg.sender][idGenerator].name = name;
-        owners[msg.sender][idGenerator].yearOfBirth = yearOfBirth;
-        owners[msg.sender][idGenerator].yearOfDeath = yearOfDeath;
-        owners[msg.sender][idGenerator].memoriam = memoriam;
-        owners[msg.sender][idGenerator].isCreated = true;
+
+        graves[idGenerator].isCreated = true;
+
+
+        graves[idGenerator].name = name;
+        graves[idGenerator].yearOfBirth = yearOfBirth;
+        graves[idGenerator].yearOfDeath = yearOfDeath;
+        graves[idGenerator].memoriam = memoriam;
+
 
         emit LogHamsterGraveAdded(idGenerator, name, yearOfBirth, yearOfDeath, memoriam);
 
@@ -60,13 +59,13 @@ contract HamsterGraveyard is Ownable, Pausable {
     }
 
     ///update the HamsterGrave info
-    function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused isPetOwner(msg.sender, hamsterGraveNum)
+    function updateHamsterGrave (uint hamsterGraveNum, string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam ) public whenNotPaused()  onlyOwner()
         returns (uint) {
 
-        owners[msg.sender][hamsterGraveNum].name = name;
-        owners[msg.sender][hamsterGraveNum].yearOfBirth = yearOfBirth;
-        owners[msg.sender][hamsterGraveNum].yearOfDeath = yearOfDeath;
-        owners[msg.sender][hamsterGraveNum].memoriam = memoriam;
+        graves[hamsterGraveNum].name = name;
+        graves[hamsterGraveNum].yearOfBirth = yearOfBirth;
+        graves[hamsterGraveNum].yearOfDeath = yearOfDeath;
+        graves[hamsterGraveNum].memoriam = memoriam;
 
         emit LogHamsterGraveUpdated(hamsterGraveNum, name, yearOfBirth, yearOfDeath, memoriam);
 
@@ -77,10 +76,10 @@ contract HamsterGraveyard is Ownable, Pausable {
     function viewHamsterGrave (uint hamsterGraveNum) view public
 	  returns (string memory name, uint yearOfBirth, uint yearOfDeath, string memory memoriam) {
 
-      name = owners[msg.sender][hamsterGraveNum].name;
-      yearOfBirth = owners[msg.sender][hamsterGraveNum].yearOfBirth;
-      yearOfDeath = owners[msg.sender][hamsterGraveNum].yearOfDeath;
-      memoriam = owners[msg.sender][hamsterGraveNum].memoriam;
+      name = graves[hamsterGraveNum].name;
+      yearOfBirth = graves[hamsterGraveNum].yearOfBirth;
+      yearOfDeath = graves[hamsterGraveNum].yearOfDeath;
+      memoriam = graves[hamsterGraveNum].memoriam;
 
       return(name, yearOfBirth, yearOfDeath, memoriam);
     }
