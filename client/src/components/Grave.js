@@ -34,10 +34,10 @@ class Grave extends React.Component {
     //its id will be the same as the index of the <Grave/>
     const myupdate = await contract.methods.updateHamsterGrave(
       this.state.hamsterGraveNum,
-      this.state.updatedName,
-      this.state.updatedYOB,
-      this.state.updatedYOD,
-      this.state.updatedMemoriam
+      (this.state.updatedName || this.props.name),
+      (this.state.updatedYOB || this.props.yob),
+      (this.state.updatedYOD || this.props.yod),
+      (this.state.updatedMemoriam || this.props.memoriam)
     ).send({from: accounts[0]});
 
     console.log("this grave was updated");
