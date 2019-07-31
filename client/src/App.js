@@ -5,12 +5,18 @@ import getWeb3 from "./utils/getWeb3";
 
 import Grave from "./components/Grave";
 import GraveForm from "./components/GraveForm";
-import AddGraveButton from "./components/AddGraveButton";
+//import AddGraveButton from "./components/AddGraveButton";
 
 import "./App.css";
 
 class App extends Component {
-  state = { gravesList: [], web3: null, accounts: null, contract: null, idGenerator: null };
+  state = { web3: null,
+            accounts: null,
+            contract: null,
+            idGenerator: null,
+            gravesList: [],
+            inputName: null
+  };
 
   componentDidMount = async () => {
     try {
@@ -34,8 +40,6 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
 
-      console.log(deployedNetwork, deployedNetwork.address);
-
       this.setState({ web3, accounts, contract: instance }, this.runExample);
 
       //using contract instead of instance here seems to produce an error
@@ -47,27 +51,15 @@ class App extends Component {
       for (var i = 0; i < response; i++) {
         temp = await instance.methods.viewHamsterGrave(i).call();
 
-        console.log("retname is");
-        console.log(temp.name);
-
         gravesListTemp[i] = {
           name: temp.name,
           yearOfBirth: temp.yearOfBirth,
           yearOfDeath: temp.yearOfDeath,
           memoriam: temp.memoriam
         };
-
-        // gravesListTemp[i].name = temp.name;
-        // gravesListTemp[i].yearOfBirth = temp.yearOfBirth;
-        // gravesListTemp[i].yearOfDeath = temp.yearOfDeath;
-        // gravesListTemp[i].memoriam = temp.memoriam;
       }
 
-
-      console.log("gravesListTemp[0].name is");
-      console.log(gravesListTemp[0].name);
-
-      this.setState({ gravesList: gravesListTemp,  idGenerator: response });
+      this.setState({ gravesList: gravesListTemp, idGenerator: response });
 
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -99,27 +91,31 @@ class App extends Component {
 
   //call addHamsterGrave
   onClickAddGrave = async () => {
+    var temp;
+    var gravesListTemp = [];
 
     const { accounts, contract } = this.state;
-    console.log("i just tried to add a hamster");
-    const response = await contract.methods.getIdGenerator().call();
-
-    console.log("in onClickAddGrave idGenerator is");
-    console.log(response);
 
     const testAddGrave = await contract.methods.addHamsterGrave('totoro', 1, 2, 'RIP').send({from: accounts[0]});
-    console.log("testAddGrave =");
-    console.log(testAddGrave);
+
+    const response = await contract.methods.getIdGenerator().call();
+
+    for (var i = 0; i < response; i++) {
+      temp = await contract.methods.viewHamsterGrave(i).call();
+
+      gravesListTemp[i] = {
+        name: temp.name,
+        yearOfBirth: temp.yearOfBirth,
+        yearOfDeath: temp.yearOfDeath,
+        memoriam: temp.memoriam
+      };
+    }
+
+    this.setState({gravesList: gravesListTemp, idGenerator: response });
   }
 
   render() {
 
-    //var names =[this.state.gravesList];
-    console.log("idGenerator is");
-    console.log(this.state.idGenerator);
-    console.log(this.state.gravesList);
-
-    //var names = [this.state.gravesList[0].name];
     var tempGraves = this.state.gravesList;
 
     var namesList = tempGraves.map(function(tempGrave, index){
@@ -136,16 +132,28 @@ class App extends Component {
           {namesList}
           <div className="column">
             <div className="small ui card">
-              <div className="content">
-                <a className="header">Add Hamster</a>
+              <div className="ui form">
+                <h1>Add a Hamster grave </h1>
+                <div className="grouped fields">
+                  <div className="required field">
+                    <label>Name</label>
+                    <input type="text" placeholder="Hammy" />
+                  </div>
+                  <div className="required  field">
+                    <label>Year of Birth</label>
+                    <input type="Year" placeholder="2018"/>
+                  </div>
+                  <div className="required field">
+                    <label>Year of Death</label>
+                    <input type="Year" placeholder="2019"/>
+                  </div>
+                  <div className="required field">
+                    <label>Memoriam</label>
+                    <input type="text" placeholder="RIP"/>
+                  </div>
+                </div>
+                <button onClick={this.onClickAddGrave} type="submit" className="ui submit button">Submit</button>
               </div>
-              <br></br>
-              <br></br>
-              <button onClick={this.onClickAddGrave} className="ui icon button">
-                <i aria-hidden="true" className="huge plus circle icon"></i>
-              </button>
-              <br></br>
-              <br></br>
             </div>
           </div>
         </div>

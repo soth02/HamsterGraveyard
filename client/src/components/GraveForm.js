@@ -24,7 +24,7 @@ const GraveForm = () => {
               <input type="text" placeholder="RIP" />
             </div>
           </div>
-          <div class="ui submit button">Submit</div>
+          <div className="ui submit button">Submit</div>
         </div>
       </div>
     </div>
