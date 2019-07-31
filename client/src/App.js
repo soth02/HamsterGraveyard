@@ -10,15 +10,16 @@ import GraveForm from "./components/GraveForm";
 import "./App.css";
 
 class App extends Component {
+
   state = { web3: null,
             accounts: null,
             contract: null,
             idGenerator: null,
             gravesList: [],
             inputName: '',
-            inputYOB: null,
-            inputYOD: null,
-            inputMemoriam: null
+            inputYOB: '',
+            inputYOD: '',
+            inputMemoriam: '',
   };
 
   componentDidMount = async () => {
@@ -114,11 +115,20 @@ class App extends Component {
       };
     }
 
-    this.setState({gravesList: gravesListTemp, idGenerator: response });
+    this.setState({
+      gravesList: gravesListTemp,
+      idGenerator: response,
+      inputName: '',
+      inputYOB: '',
+      inputYOD: '',
+      inputMemoriam: ''
+    });
+
   }
 
   nameChangeHandler = event => {
     this.setState({ inputName: event.target.value });
+
   }
 
   yOBChangeHandler = event => {
@@ -176,20 +186,21 @@ class App extends Component {
                     <input
                       type="text"
                       placeholder="Hammy"
+                      value={this.state.inputName}
                       onChange={this.nameChangeHandler}
                     />
                   </div>
                   <div className="required  field">
                     <label>Year of Birth</label>
-                    <input type="Year" placeholder="2018" onChange={this.yOBChangeHandler}/>
+                    <input type="Year" placeholder="2018" value={this.state.inputYOB} onChange={this.yOBChangeHandler}/>
                   </div>
                   <div className="required field">
                     <label>Year of Death</label>
-                    <input type="Year" placeholder="2019" onChange={this.yODChangeHandler}/>
+                    <input type="Year" placeholder="2019" value={this.state.inputYOD} onChange={this.yODChangeHandler}/>
                   </div>
                   <div className="required field">
                     <label>Memoriam</label>
-                    <input type="text" placeholder="RIP" onChange={this.memoriamChangeHandler}/>
+                    <input type="text" placeholder="RIP" value={this.state.inputMemoriam} onChange={this.memoriamChangeHandler}/>
                   </div>
                 </div>
                 <button onClick={this.onClickAddGrave} type="submit" className="ui submit button">Submit</button>
