@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Grave = props => {
+
+const Grave = (props) => {
+
   return (
     <div className="column">
       <div className="small ui card">
         <div className="image">
-          <img src="./hamster_100x100.png" className="visible content"/>
+          <img alt='' src="./hamster_100x100.png" className="visible content"/>
         </div>
         <div className="content">
           <a className="header">{props.name}</a>
@@ -18,6 +20,7 @@ const Grave = props => {
             {props.memoriam}
           </a>
         </div>
+        <button>update {props.hamsterGraveNum}</button>
       </div>
     </div>
   );

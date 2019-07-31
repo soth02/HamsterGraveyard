@@ -15,7 +15,10 @@ class App extends Component {
             contract: null,
             idGenerator: null,
             gravesList: [],
-            inputName: null
+            inputName: '',
+            inputYOB: null,
+            inputYOD: null,
+            inputMemoriam: null
   };
 
   componentDidMount = async () => {
@@ -86,17 +89,25 @@ class App extends Component {
   };
 
   onClickUpdateGrave = async () => {
+    //var gravesListTemp = this.state.gravesList;
+    const { accounts, contract } = this.state;
+
     //call updateHamsterGrave with props
+    //its id will be the same as the index of the <Grave/>
+
+
+    //then update the gravesList
+    //this.setState({gravesList: gravesListTemp});
+
   }
 
   //call addHamsterGrave
   onClickAddGrave = async () => {
     var temp;
     var gravesListTemp = [];
-
     const { accounts, contract } = this.state;
 
-    const testAddGrave = await contract.methods.addHamsterGrave('totoro', 1, 2, 'RIP').send({from: accounts[0]});
+    await contract.methods.addHamsterGrave(this.state.inputName, this.state.inputYOB, this.state.inputYOD, this.state.inputMemoriam).send({from: accounts[0]});
 
     const response = await contract.methods.getIdGenerator().call();
 
@@ -114,12 +125,40 @@ class App extends Component {
     this.setState({gravesList: gravesListTemp, idGenerator: response });
   }
 
+  nameChangeHandler = event => {
+    this.setState({ inputName: event.target.value });
+  }
+
+  yOBChangeHandler = event => {
+    this.setState({ inputYOB: event.target.value });
+  }
+
+  yODChangeHandler = event => {
+    this.setState({ inputYOD: event.target.value });
+  }
+
+  memoriamChangeHandler = event => {
+    this.setState({ inputMemoriam: event.target.value });
+  }
+
   render() {
 
     var tempGraves = this.state.gravesList;
 
     var namesList = tempGraves.map(function(tempGrave, index){
-      return <Grave key={index} name={tempGrave.name} yob={tempGrave.yearOfBirth} yod={tempGrave.yearOfDeath} memoriam={tempGrave.memoriam}/>;
+      return (
+          <Grave
+          key={index}
+          name={tempGrave.name}
+          yob={tempGrave.yearOfBirth}
+          yod={tempGrave.yearOfDeath}
+          memoriam={tempGrave.memoriam}
+          hamsterGraveNum={index}
+          
+
+
+          />
+      );
     })
 
     if (!this.state.web3) {
@@ -127,7 +166,8 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <div>The idGenerator value is {this.state.idGenerator}</div>
+        <h1>Your Personal Hamster Graveyard</h1>
+
         <div className="ui three column grid">
           {namesList}
           <div className="column">
@@ -137,19 +177,23 @@ class App extends Component {
                 <div className="grouped fields">
                   <div className="required field">
                     <label>Name</label>
-                    <input type="text" placeholder="Hammy" />
+                    <input
+                      type="text"
+                      placeholder="Hammy"
+                      onChange={this.nameChangeHandler}
+                    />
                   </div>
                   <div className="required  field">
                     <label>Year of Birth</label>
-                    <input type="Year" placeholder="2018"/>
+                    <input type="Year" placeholder="2018" onChange={this.yOBChangeHandler}/>
                   </div>
                   <div className="required field">
                     <label>Year of Death</label>
-                    <input type="Year" placeholder="2019"/>
+                    <input type="Year" placeholder="2019" onChange={this.yODChangeHandler}/>
                   </div>
                   <div className="required field">
                     <label>Memoriam</label>
-                    <input type="text" placeholder="RIP"/>
+                    <input type="text" placeholder="RIP" onChange={this.memoriamChangeHandler}/>
                   </div>
                 </div>
                 <button onClick={this.onClickAddGrave} type="submit" className="ui submit button">Submit</button>
