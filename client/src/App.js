@@ -94,7 +94,12 @@ class App extends Component {
     var gravesListTemp = [];
     const { accounts, contract } = this.state;
 
-    await contract.methods.addHamsterGrave(this.state.inputName, this.state.inputYOB, this.state.inputYOD, this.state.inputMemoriam).send({from: accounts[0]});
+    await contract.methods.addHamsterGrave(
+      (this.state.inputName || "you forgot to name your hamster"),
+      (this.state.inputYOB || 2000),
+      (this.state.inputYOD || 2001),
+      (this.state.inputMemoriam || "RIP")
+    ).send({from: accounts[0]});
 
     const response = await contract.methods.getIdGenerator().call();
 
