@@ -88,19 +88,6 @@ class App extends Component {
     this.setState({ idGenerator: response });
   };
 
-  onClickUpdateGrave = async () => {
-    //var gravesListTemp = this.state.gravesList;
-    const { accounts, contract } = this.state;
-
-    //call updateHamsterGrave with props
-    //its id will be the same as the index of the <Grave/>
-
-
-    //then update the gravesList
-    //this.setState({gravesList: gravesListTemp});
-
-  }
-
   //call addHamsterGrave
   onClickAddGrave = async () => {
     var temp;
@@ -144,6 +131,9 @@ class App extends Component {
   render() {
 
     var tempGraves = this.state.gravesList;
+    const tempContract = this.state.contract;
+    const tempAccounts = this.state.accounts;
+    const tempWeb3 = this.state.web3;
 
     var namesList = tempGraves.map(function(tempGrave, index){
       return (
@@ -154,8 +144,10 @@ class App extends Component {
           yod={tempGrave.yearOfDeath}
           memoriam={tempGrave.memoriam}
           hamsterGraveNum={index}
-          
-
+          accounts={tempAccounts}
+          contract={tempContract}
+          web3={tempWeb3}
+          isFormHidden={true}
 
           />
       );
@@ -167,7 +159,6 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Your Personal Hamster Graveyard</h1>
-
         <div className="ui three column grid">
           {namesList}
           <div className="column">
