@@ -14,6 +14,9 @@ class App extends Component {
 
   componentDidMount = async () => {
     try {
+
+      var temp;
+      var gravesListTemp = [];
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
@@ -30,7 +33,42 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
+
+      console.log(deployedNetwork, deployedNetwork.address);
+
       this.setState({ web3, accounts, contract: instance }, this.runExample);
+
+      //using contract instead of instance here seems to produce an error
+      const response = await instance.methods.idGenerator().call();
+
+      console.log("idGenerator is");
+      console.log(response);
+
+      for (var i = 0; i < response; i++) {
+        temp = await instance.methods.viewHamsterGrave(i).call();
+
+        console.log("retname is");
+        console.log(temp.name);
+
+        gravesListTemp[i] = {
+          name: temp.name,
+          yearOfBirth: temp.yearOfBirth,
+          yearOfDeath: temp.yearOfDeath,
+          memoriam: temp.memoriam
+        };
+
+        // gravesListTemp[i].name = temp.name;
+        // gravesListTemp[i].yearOfBirth = temp.yearOfBirth;
+        // gravesListTemp[i].yearOfDeath = temp.yearOfDeath;
+        // gravesListTemp[i].memoriam = temp.memoriam;
+      }
+
+
+      console.log("gravesListTemp[0].name is");
+      console.log(gravesListTemp[0].name);
+
+      this.setState({ gravesList: gravesListTemp,  idGenerator: response });
+
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -45,44 +83,48 @@ class App extends Component {
 
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.idGenerator().call();
+    const response = await contract.methods.getIdGenerator().call();
 
-    //const testAddGrave = await contract.methods.addHamsterGrave('totoro', 1, 2, 'RIP').call();
+    console.log("in runExample idGenerator is");
+    console.log(response);
+
 
     // Update state with the result.
     this.setState({ idGenerator: response });
   };
 
-  populateGraveyard = async () => {
-    var temp;
-    var gravesListTemp = [];
+  onClickUpdateGrave = async () => {
+    //call updateHamsterGrave with props
+  }
+
+  //call addHamsterGrave
+  onClickAddGrave = async () => {
 
     const { accounts, contract } = this.state;
+    console.log("i just tried to add a hamster");
+    const response = await contract.methods.getIdGenerator().call();
 
-    const response = await contract.methods.idGenerator().call();
-    this.setState({ idGenerator: response });
+    console.log("in onClickAddGrave idGenerator is");
+    console.log(response);
 
-    for(var i = 0; i < this.idGenerator; i++){
-          temp = await contract.methods.viewHamsterGrave(i);
-
-          gravesListTemp[i].name = temp.name;
-          gravesListTemp[i].yearOfBirth = temp.yearOfBirth;
-          gravesListTemp[i].yearOfDeath = temp.yearOfDeath;
-          gravesListTemp[i].memoriam = temp.memoriam;
-    }
-
-    this.setState({ gravesList: gravesListTemp});
-
+    const testAddGrave = await contract.methods.addHamsterGrave('totoro', 1, 2, 'RIP').send({from: accounts[0]});
+    console.log("testAddGrave =");
+    console.log(testAddGrave);
   }
 
   render() {
 
-    var names =['Ham', 'Shem', 'Ham2'];
-    var namesList = names.map(function(name){
-      return <Grave name={name} yob={2001} yod={2002} memoriam="RIP"/>;
+    //var names =[this.state.gravesList];
+    console.log("idGenerator is");
+    console.log(this.state.idGenerator);
+    console.log(this.state.gravesList);
+
+    //var names = [this.state.gravesList[0].name];
+    var tempGraves = this.state.gravesList;
+
+    var namesList = tempGraves.map(function(tempGrave, index){
+      return <Grave key={index} name={tempGrave.name} yob={tempGrave.yearOfBirth} yod={tempGrave.yearOfDeath} memoriam={tempGrave.memoriam}/>;
     })
-
-
 
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -92,7 +134,20 @@ class App extends Component {
         <div>The idGenerator value is {this.state.idGenerator}</div>
         <div className="ui three column grid">
           {namesList}
-          <AddGraveButton/>
+          <div className="column">
+            <div className="small ui card">
+              <div className="content">
+                <a className="header">Add Hamster</a>
+              </div>
+              <br></br>
+              <br></br>
+              <button onClick={this.onClickAddGrave} className="ui icon button">
+                <i aria-hidden="true" className="huge plus circle icon"></i>
+              </button>
+              <br></br>
+              <br></br>
+            </div>
+          </div>
         </div>
       </div>
     );
