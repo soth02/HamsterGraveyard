@@ -1,2 +1,4 @@
-testnet:
-contract address:
+testnet: rinkeby
+
+migrations address: 0x32372A1148bcC4EEAbF7E5d61D844832F6b7204b
+hamster graveyard address: 0xaD8B73A2e6b19B760151b0F16207f0Cbd0Abb710
