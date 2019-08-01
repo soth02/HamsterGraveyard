@@ -2,8 +2,8 @@
 
 Hamster Graveyard is smart contract for memorializing your deceased hamsters.  It was written primary as the final project for the Consensys Academy developer program, but also as a tribute my hamster, Hamtaro.
 
-This project is based on the truffle react box: https://github.com/truffle-box/react-box.git
-
+This project is based on the truffle react box: https://github.com/truffle-box/react-box.git and imports libraries from OpenZeppelin: 
+https://github.com/OpenZeppelin/openzeppelin-contracts.
 ## Setup
 
 1. You will need to install nodejs.  Please see https://github.com/nodesource/distributions/blob/master/README.md for installation    directions.  This project was created with version `node v8.10.0`.
