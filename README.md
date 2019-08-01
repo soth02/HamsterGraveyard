@@ -1,6 +1,6 @@
 # Hamster Graveyard - ConsenSys Academy 2019 Final Project 
 
-Hamster Graveyard is smart contract for memorializing your deceased hamsters.  It was primarily written as the final project for the Consensys Academy developer program, but was inspired by the oncoming mortality of my first pet hamster, Hamtaro.
+Hamster Graveyard is smart contract for memorializing your deceased hamsters.  It was primarily written as the final project for the ConsenSys Academy developer program, but was inspired by the oncoming mortality of my first pet hamster, Hamtaro.
 
 This project is based on the truffle react box: https://github.com/truffle-box/react-box.git and imports libraries from OpenZeppelin: 
 https://github.com/OpenZeppelin/openzeppelin-contracts.
