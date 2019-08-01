@@ -57,3 +57,5 @@ This project is based on the truffle react box: https://github.com/truffle-box/r
 
 10. Navigate to React server at http://localhost:3000
    * Accept React App prompt.
+
+11. Start adding Hamster Memorials!
