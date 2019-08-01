@@ -43,13 +43,17 @@ This project is based on the truffle react box: https://github.com/truffle-box/r
     test
     ```
 
-8. In the `client` directory, run the React app. Smart contract changes must be manually recompiled and migrated.
+8. Open another terminal.  Navigate to the `client` directory, run the React app. Smart contract changes must be manually recompiled and migrated.
     ```javascript
-    // in another terminal (i.e. not in the truffle develop prompt)
+    // open another terminal (i.e. not in the truffle develop prompt)
     cd client
     npm run start
     ```
 9. Install MetaMask on your browser: https://metamask.io.
-   * import seed phrase copied down earlier from ganache chain
+   * Import seed phrase copied down earlier from ganache chain
+   * Change network to Localhost 8545.
+   * If you have been using MetaMask on Ganache previously, reset your account
+     in Settings->Advanced->Reset Account to synchronize with the ganache chain.
 
 10. Navigate to React server at http://localhost:3000
+   * Accept React App prompt.
