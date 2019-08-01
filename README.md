@@ -5,6 +5,10 @@ Hamster Graveyard is smart contract for memorializing your deceased hamsters.  I
 This project is based on the truffle react box: https://github.com/truffle-box/react-box.git and imports libraries from OpenZeppelin: 
 https://github.com/OpenZeppelin/openzeppelin-contracts.
 
+For a video introduction, please visit https://www.youtube.com/watch?v=7Ls2rc9W63s.
+
+Thanks for checking out my project!
+
 
 ![Hamster Graveyard](screenshot.PNG)
 
