@@ -16,11 +16,12 @@ Thanks for checking out my project!
 
 1. You will need to install nodejs.  Please see https://github.com/nodesource/distributions/blob/master/README.md for installation    directions.  This project was created with version `node v8.10.0`.
 
-2. You will also need to install truffle and ganache-cli.
+2. You will also need to install truffle, ganache-cli, and the truffle-hdwallet-provider.
 
    ```js
     npm install -g ganache-cli
     npm install -g truffle
+    npm install -g truffle-hdwallet-provider
    ```
 3. Clone this repo.
 
